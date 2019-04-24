@@ -1,5 +1,17 @@
+"""Worklog with a Database
+create entries and save them to a database. An entry would consist of
+an employee name, date of task, title of task, time spent
+(rounded minutes), and notes (optional). The user can page through past
+entries to edit, or delete them.
+
+Created: 04/08/2019
+Author: Erik Burmeister
+"""
+
+
 import datetime
 import os
+
 
 from peewee import *
 
@@ -28,7 +40,7 @@ class Entry(Model):
         database = db
 
 
-def initialize():
+def initialize():  # pragma: no cover
     """create the database and the table if they don't exist"""
 
     try:
@@ -43,20 +55,10 @@ def initialize():
         pass
 
 
-def db_starter():
-    """Checks that a csv file is created once per run of the app."""
-
-    z = 0
-    for _ in range(0, 1):
-        if z == 0:
-            initialize()
-        z += 1
-
-
 def main_menu():
     """Displays the main menu of the app."""
 
-    db_starter()
+    initialize()  # pragma: no cover
 
     main_menu_options = """
 WORK LOG with a Database
@@ -99,6 +101,9 @@ D) Quit Program
             input("Press enter to try again.")
             clear_screen()
 
+    db.close()
+    print("The connection to the database has been closed.")
+    print("")
     print("Thank you for using Work Log with a Database.")
     print("See you later!")
 
@@ -107,7 +112,7 @@ def add_employee():
     """Creates a name for the class instance"""
 
     print("Type first, middle (if applicable), and last name")
-    name_of_employee = input("Name of employee: ").title()
+    name_of_employee = input("Name of employee: ").title().strip()
     clear_screen()
 
     return name_of_employee
@@ -159,13 +164,12 @@ def add_time():
         try:
             time_spent = int(input("Time spent (rounded minutes): "))
 
-        except:
+        except ValueError:
             print("That's not a number. Try again.")
 
         else:
             clear_screen()
             break
-
 
     return time_spent
 
@@ -448,7 +452,7 @@ G) Return to Menu
 def list_employees():
     """Prints a list of all the employee names who have an entry in
     the database under their name. Then let's the user select the
-    employee by inputing the number next to their name. The user input
+    employee by inputting the number next to their name. The user input
     is passed into the display_entries() function to display the
     results in a predetermined format.
     """
@@ -506,10 +510,11 @@ def list_employees():
 
 
 def search_employee_name():
-    """The user is allowed to input a matching string or part of a string
-    that is believed to be in an employee name that has entries in the
-    database. The user input is passed into the display_entries() function
-    to display the results in a predetermined format.
+    """The user is allowed to input a matching string or part of a
+    string that is believed to be in an employee name that has entries
+    in the database. The user input is passed into the
+    display_entries() function to display the results in a
+    predetermined format.
     """
 
     employee_list = []
@@ -579,9 +584,9 @@ def search_employee_name():
 
 def list_dates():
     """Prints a list of all the dates found in an entry in
-    the database. Then let's the user select the date by inputing
+    the database. Then let's the user select the date by inputting
     the number next to the date. The user input is passed into the
-    display_entries() function to display theresults in a
+    display_entries() function to display the results in a
     predetermined format.
     """
 
@@ -676,7 +681,7 @@ def search_times():
         try:
             search = int(input("Exact time spent (rounded minutes): "))
 
-        except:
+        except ValueError:
             print("That's not a number. Try again.")
             input("Press enter to try again.")
             clear_screen()
