@@ -12,14 +12,13 @@ Author: Erik Burmeister
 import datetime
 import os
 
-
 from peewee import *
 
 
 db = SqliteDatabase("entry_database_2.4.db")
 
 
-def clear_screen():
+def clear_screen():  # pragma: no cover
     """Clears the screen from any previous output."""
 
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -74,7 +73,8 @@ D) Quit Program
 
     while (not main_menu_answer == 'a' or
            not main_menu_answer == 'b' or
-           not main_menu_answer == 'c'):
+           not main_menu_answer == 'c' or
+           not main_menu_answer == 'd'):
 
         print(main_menu_options)
 
@@ -166,6 +166,8 @@ def add_time():
 
         except ValueError:
             print("That's not a number. Try again.")
+            input("Press enter to try again.")
+            clear_screen()
 
         else:
             clear_screen()
@@ -344,7 +346,7 @@ def display_entries(subject=None, subject_2=None,
 
             if display_entries_selection == 'd':
                 if (not subject and not subject_2 and
-                    not search_query and not search_query_2):
+                        not search_query and not search_query_2):
 
                     delete_entry(entry[n])
                     entry = Entry.select().order_by(Entry.date)
@@ -397,7 +399,7 @@ def search_by_menu():
     search_by_options = """
 Do you want to search by:
 A) List of Employees
-B) Employee Name
+B) Search Employee Name
 C) List of Dates
 D) Search Between Two Dates
 E) Exact Time Spent on a Task
@@ -409,7 +411,8 @@ G) Return to Menu
 
     while (not search_by_answer == 'a' or not search_by_answer == 'b' or
            not search_by_answer == 'c' or not search_by_answer == 'd' or
-           not search_by_answer == 'e'):
+           not search_by_answer == 'e' or not search_by_answer == 'f' or
+           not search_by_answer == 'g'):
 
         print(search_by_options)
 
@@ -538,10 +541,10 @@ def search_employee_name():
                 employee_choice_list.append(entry.name)
 
     if len(employee_list) == 0:
-            clear_screen()
-            print("No employee name contains that search.")
-            input("Press enter to return to the last menu.")
-            return
+        clear_screen()
+        print("No employee name contains that search.")
+        input("Press enter to return to the last menu.")
+        return
 
     else:
         while True:
@@ -593,16 +596,16 @@ def list_dates():
     date_list = []
     date_choice_list = [None]
 
-    entries = Entry.select().order_by(Entry.id)
+    entries = Entry.select().order_by(Entry.date)
 
     for entry in entries:
 
-            if entry.date.strftime("%m/%d/%Y") in date_list:
-                pass
+        if entry.date.strftime("%m/%d/%Y") in date_list:
+            pass
 
-            elif entry not in date_list:
-                date_list.append(entry.date.strftime("%m/%d/%Y"))
-                date_choice_list.append(entry.date)
+        elif entry not in date_list:
+            date_list.append(entry.date.strftime("%m/%d/%Y"))
+            date_choice_list.append(entry.date)
 
     while True:
 
