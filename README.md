@@ -23,6 +23,3 @@ Open app.py.
 run in terminal for clear_screen() functionality. 
 
 I got 93% coverage. 
-
-
-
