@@ -1,6 +1,6 @@
 # TTH_TD_Project_4
 
-* App Info * 
+App Info * 
 Work Log with a Database.
 Save entries with a name,
 date, task name, time spent on task,
@@ -12,7 +12,7 @@ desires.
 
 ----------------------------------------
 
-* Check requirements.txt * 
+Check requirements.txt * 
 Info on package versions on it.
 -------------------------------
  
